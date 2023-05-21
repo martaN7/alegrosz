@@ -1,12 +1,12 @@
-import './App.css';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './router.tsx';
+import { CssBaseline } from '@mui/material';
 
 function App() {
     return (
         <>
             <RouterProvider router={router} />
-            <h1>Alegrosz</h1>
+            <CssBaseline />
         </>
     );
 }
