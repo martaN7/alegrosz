@@ -12,11 +12,21 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import { Link } from 'react-router-dom';
 
-const pages = ['Products', 'Pricing', 'Blog'];
+const pages = [
+    {
+        name: 'Home',
+        link: '/',
+    },
+    {
+        name: 'Contact',
+        link: '/contact',
+    },
+];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-function ResponsiveAppBar() {
+function NavBar() {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
         null
     );
@@ -27,6 +37,7 @@ function ResponsiveAppBar() {
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
     };
+
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
     };
@@ -41,28 +52,42 @@ function ResponsiveAppBar() {
 
     return (
         <AppBar position="static">
-            <Container maxWidth="xl">
+            <Container maxWidth="lg">
                 <Toolbar disableGutters>
-                    <AdbIcon
-                        sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}
-                    />
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="a"
-                        href="/"
-                        sx={{
-                            mr: 2,
-                            display: { xs: 'none', md: 'flex' },
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}
-                    >
-                        LOGO
-                    </Typography>
+                    <Box>
+                        <Link
+                            to={'/'}
+                            style={{
+                                display: 'flex',
+                                color: 'inherit',
+                                textDecoration: 'none',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <AdbIcon
+                                sx={{
+                                    display: { xs: 'none', md: 'flex' },
+                                    mr: 1,
+                                }}
+                            />
+                            <Typography
+                                variant="h6"
+                                noWrap
+                                component="span"
+                                sx={{
+                                    mr: 2,
+                                    display: { xs: 'none', md: 'flex' },
+                                    fontFamily: 'monospace',
+                                    fontWeight: 700,
+                                    letterSpacing: '.3rem',
+                                    color: 'inherit',
+                                    textDecoration: 'none',
+                                }}
+                            >
+                                LOGO
+                            </Typography>
+                        </Link>
+                    </Box>
 
                     <Box
                         sx={{
@@ -98,53 +123,87 @@ function ResponsiveAppBar() {
                                 display: { xs: 'block', md: 'none' },
                             }}
                         >
-                            {pages.map((page) => (
-                                <MenuItem
-                                    key={page}
-                                    onClick={handleCloseNavMenu}
+                            {pages.map(({ name, link }) => (
+                                <Link
+                                    to={link}
+                                    key={name}
+                                    style={{
+                                        textDecoration: 'none',
+                                        color: 'inherit',
+                                    }}
                                 >
-                                    <Typography textAlign="center">
-                                        {page}
-                                    </Typography>
-                                </MenuItem>
+                                    <MenuItem onClick={handleCloseNavMenu}>
+                                        <Typography textAlign="center">
+                                            {name}
+                                        </Typography>
+                                    </MenuItem>
+                                </Link>
                             ))}
                         </Menu>
                     </Box>
-                    <AdbIcon
-                        sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }}
-                    />
-                    <Typography
-                        variant="h5"
-                        noWrap
-                        component="a"
-                        href=""
+                    <Box
                         sx={{
-                            mr: 2,
                             display: { xs: 'flex', md: 'none' },
                             flexGrow: 1,
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
                         }}
                     >
-                        LOGO
-                    </Typography>
+                        <Link
+                            to={'/'}
+                            style={{
+                                display: 'flex',
+                                color: 'inherit',
+                                textDecoration: 'none',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <AdbIcon
+                                sx={{
+                                    display: { xs: 'flex', md: 'none' },
+                                    mr: 1,
+                                }}
+                            />
+                            <Typography
+                                variant="h5"
+                                noWrap
+                                component="span"
+                                sx={{
+                                    mr: 2,
+                                    display: { xs: 'flex', md: 'none' },
+                                    flexGrow: 1,
+                                    fontFamily: 'monospace',
+                                    fontWeight: 700,
+                                    letterSpacing: '.3rem',
+                                    color: 'inherit',
+                                    textDecoration: 'none',
+                                }}
+                            >
+                                LOGO
+                            </Typography>
+                        </Link>
+                    </Box>
                     <Box
                         sx={{
                             flexGrow: 1,
                             display: { xs: 'none', md: 'flex' },
                         }}
                     >
-                        {pages.map((page) => (
-                            <Button
-                                key={page}
-                                onClick={handleCloseNavMenu}
-                                sx={{ my: 2, color: 'white', display: 'block' }}
+                        {pages.map(({ name, link }) => (
+                            <Link
+                                to={link}
+                                style={{ textDecoration: 'none' }}
+                                key={name}
                             >
-                                {page}
-                            </Button>
+                                <Button
+                                    onClick={handleCloseNavMenu}
+                                    sx={{
+                                        my: 2,
+                                        color: 'white',
+                                        display: 'block',
+                                    }}
+                                >
+                                    {name}
+                                </Button>
+                            </Link>
                         ))}
                     </Box>
 
@@ -193,4 +252,4 @@ function ResponsiveAppBar() {
         </AppBar>
     );
 }
-export default ResponsiveAppBar;
+export default NavBar;
