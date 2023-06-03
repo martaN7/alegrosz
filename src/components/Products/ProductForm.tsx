@@ -1,11 +1,18 @@
 import { useFormik } from 'formik';
 import Grid from '@mui/material/Unstable_Grid2';
-import { FormControl, InputLabel, Select, TextField } from '@mui/material';
+import {
+    Alert,
+    FormControl,
+    InputLabel,
+    Select,
+    TextField,
+} from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import DropInput from '../DropInput.tsx';
 import MenuItem from '@mui/material/MenuItem';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // [{id, name, subcategories: [{id, name}]}]
 
@@ -21,6 +28,21 @@ interface Category extends Kind {
 interface CategoryApi extends Kind {
     subcategories: number[];
 }
+
+interface Product {
+    name: string;
+    description: string;
+    price: number;
+    image: string;
+    stockCount: number;
+    barcode: string;
+    category: number;
+    subcategory: number;
+}
+
+type ProductId = {
+    id: number;
+};
 
 async function getKind<T>(endpoint: string): Promise<T[]> {
     const response = await fetch(`/api/v1/${endpoint}`);
@@ -45,13 +67,55 @@ async function getCategoriesWithSubcategories(): Promise<Category[]> {
     }));
 }
 
+async function addProduct(
+    endpoint: string,
+    product: Product
+): Promise<Product & ProductId> {
+    const response = await fetch(`/api/v1/${endpoint}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(product),
+    });
+
+    return response.json();
+}
+
+function delay(timer: number, fn: Function, ...args: any[]): Promise<number> {
+    return new Promise((resolve) => {
+        const interval = setTimeout(() => {
+            fn(...args);
+        }, timer);
+        resolve(interval);
+    });
+}
+
 function ProductForm() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [activeSubcategories, setActiveSubcategories] = useState<Kind[]>([]);
 
+    const [isMessage, setIsMessage] = useState(false);
+    const [productId, setProductId] = useState<number | undefined>(undefined);
+
+    const navigate = useNavigate();
+
     useEffect(() => {
         getCategoriesWithSubcategories().then(setCategories);
     }, []);
+
+    useEffect(() => {
+        let intervalId: number | undefined;
+
+        if (isMessage) {
+            delay(5000, navigate, `/products/${productId}`).then((interval) => {
+                intervalId = interval;
+            });
+        }
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, [isMessage]);
 
     const formik = useFormik({
         initialValues: {
@@ -61,17 +125,23 @@ function ProductForm() {
             image: '',
             stockCount: 0,
             barcode: '',
-            category: '0',
-            subcategory: '0',
+            category: 0,
+            subcategory: 0,
         },
-        onSubmit: (values) => {
-            alert(JSON.stringify(values, null, 2));
+        onSubmit: async (values) => {
+            const product = await addProduct('products', values);
+            setIsMessage(true);
+            setProductId(product.id);
         },
     });
 
-    function updateSubcategories(selectedCategory: string) {
+    function updateSubcategories(selectedCategory: number) {
+        if (selectedCategory === 0) {
+            setActiveSubcategories([]);
+        }
+
         const selectedCategoryObj = categories.find(
-            (category) => category.name === selectedCategory
+            (category) => category.id === selectedCategory
         );
 
         if (selectedCategoryObj !== undefined) {
@@ -82,7 +152,12 @@ function ProductForm() {
     }
 
     return (
-        <Box sx={{ mt: '20px' }}>
+        <Box sx={{ my: '20px' }}>
+            {isMessage && (
+                <Alert severity="success" sx={{ marginBottom: '20px' }}>
+                    Product has been added.
+                </Alert>
+            )}
             <form onSubmit={formik.handleSubmit}>
                 <Grid container spacing={2}>
                     <Grid xs={12}>
@@ -151,16 +226,18 @@ function ProductForm() {
                                 label="Category"
                                 onChange={(e) => {
                                     formik.handleChange(e);
-                                    updateSubcategories(e.target.value);
-                                    formik.values.subcategory = '0';
+                                    updateSubcategories(
+                                        e.target.value as number
+                                    );
+                                    formik.values.subcategory = 0;
                                 }}
                                 name="category"
                             >
-                                <MenuItem value="0">---</MenuItem>
+                                <MenuItem value={0}>---</MenuItem>
                                 {categories.map((category) => (
                                     <MenuItem
+                                        value={category.id}
                                         key={category.id}
-                                        value={category.name}
                                     >
                                         {category.name}
                                     </MenuItem>
@@ -176,12 +253,13 @@ function ProductForm() {
                             <Select
                                 labelId="subcategoryLbl"
                                 id="subcategory"
+                                name="subcategory"
                                 value={formik.values.subcategory}
                                 label="Subcategory"
                                 onChange={formik.handleChange}
-                                name="subcategory"
+                                disabled={!activeSubcategories.length}
                             >
-                                <MenuItem value="0">---</MenuItem>
+                                <MenuItem value={0}>---</MenuItem>
                                 {activeSubcategories.map((subcategory) => (
                                     <MenuItem
                                         key={subcategory.id}

@@ -1,5 +1,39 @@
 {
-  "products": [],
+  "products": [
+    {
+      "name": "Smartphone X",
+      "description": "A high-end smartphone with advanced features.",
+      "price": 999.99,
+      "image": "https://example.com/images/smartphone_x.jpg",
+      "stockCount": 10,
+      "barcode": "1234567890",
+      "category": 3,
+      "subcategory": 4,
+      "id": 1
+    },
+    {
+      "name": "Telefon",
+      "description": "opis",
+      "price": 369.22,
+      "image": "",
+      "stockCount": 125,
+      "barcode": "15468431581",
+      "category": 2,
+      "subcategory": "iOS Phones",
+      "id": 2
+    },
+    {
+      "name": "Telefon",
+      "description": "Opis",
+      "price": 369.22,
+      "image": "",
+      "stockCount": 265,
+      "barcode": "35464135131",
+      "category": 2,
+      "subcategory": "Android Phones",
+      "id": 3
+    }
+  ],
   "categories": [
     {
       "id": 1,
