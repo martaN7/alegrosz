@@ -5,8 +5,49 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import DropInput from '../DropInput.tsx';
 import MenuItem from '@mui/material/MenuItem';
+import { useEffect, useState } from 'react';
+
+// [{id, name, subcategories: [{id, name}]}]
+
+interface Kind {
+    id: number;
+    name: string;
+}
+
+interface Category extends Kind {
+    subcategories: Kind[];
+}
+
+async function getKind(endpoint: string) {
+    const response = await fetch(`/api/v1/${endpoint}`);
+    return response.json();
+}
+
+async function getCategriesWithSubcategories() {
+    const response = await Promise.all([
+        getKind('categories'),
+        getKind('subcategories'),
+    ]);
+
+    const [categories, subcategories] = response;
+
+    return categories.map((category) => ({
+        ...category,
+        subcategories: category.subcategories.map((subcategoryId) =>
+            subcategories.find(
+                (subcategory) => subcategory.id === subcategoryId
+            )
+        ),
+    }));
+}
 
 function ProductForm() {
+    const [categories, setCategories] = useState<Category[]>([]);
+
+    useEffect(() => {
+        getCategriesWithSubcategories().then(setCategories);
+    }, []);
+
     const formik = useFormik({
         initialValues: {
             name: '',
@@ -22,6 +63,7 @@ function ProductForm() {
             alert(JSON.stringify(values, null, 2));
         },
     });
+
     return (
         <Box sx={{ mt: '20px' }}>
             <form onSubmit={formik.handleSubmit}>
@@ -118,10 +160,11 @@ function ProductForm() {
                             </Select>
                         </FormControl>
                     </Grid>
-
-                    <Button variant="contained" type="submit">
-                        Add product
-                    </Button>
+                    <Grid xs={12}>
+                        <Button variant="contained" type="submit">
+                            Add product
+                        </Button>
+                    </Grid>
                 </Grid>
             </form>
         </Box>
