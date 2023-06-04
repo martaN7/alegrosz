@@ -12,7 +12,8 @@ import Button from '@mui/material/Button';
 import DropInput from '../DropInput.tsx';
 import MenuItem from '@mui/material/MenuItem';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
+import { Product, ProductWithoutId } from '../../types/product.ts';
 
 // [{id, name, subcategories: [{id, name}]}]
 
@@ -28,21 +29,6 @@ interface Category extends Kind {
 interface CategoryApi extends Kind {
     subcategories: number[];
 }
-
-interface Product {
-    name: string;
-    description: string;
-    price: number;
-    image: string;
-    stockCount: number;
-    barcode: string;
-    category: number;
-    subcategory: number;
-}
-
-type ProductId = {
-    id: number;
-};
 
 async function getKind<T>(endpoint: string): Promise<T[]> {
     const response = await fetch(`/api/v1/${endpoint}`);
@@ -69,8 +55,8 @@ async function getCategoriesWithSubcategories(): Promise<Category[]> {
 
 async function addProduct(
     endpoint: string,
-    product: Product
-): Promise<Product & ProductId> {
+    product: ProductWithoutId
+): Promise<Product> {
     const response = await fetch(`/api/v1/${endpoint}`, {
         method: 'POST',
         headers: {
@@ -82,10 +68,14 @@ async function addProduct(
     return response.json();
 }
 
-function delay(timer: number, fn: Function, ...args: any[]): Promise<number> {
+function delay(
+    timer: number,
+    fn: NavigateFunction,
+    arg: string
+): Promise<number> {
     return new Promise((resolve) => {
-        const interval = setTimeout(() => {
-            fn(...args);
+        const interval = window.setTimeout(() => {
+            fn(arg);
         }, timer);
         resolve(interval);
     });
@@ -115,7 +105,7 @@ function ProductForm() {
         return () => {
             clearInterval(intervalId);
         };
-    }, [isMessage]);
+    }, [isMessage, navigate, productId]);
 
     const formik = useFormik({
         initialValues: {
