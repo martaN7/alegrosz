@@ -4,9 +4,10 @@ import ProductItem from './ProductItem.tsx';
 type ProductListProps = {
     products: ProductWithCategories[];
     query: string;
+    sortParam: string;
 };
 
-function ProductList({ products, query }: ProductListProps) {
+function ProductList({ products, query, sortParam }: ProductListProps) {
     return (
         <>
             {products
@@ -15,6 +16,17 @@ function ProductList({ products, query }: ProductListProps) {
                         .toLowerCase()
                         .includes(query.toLowerCase())
                 )
+                .sort((a, b) => {
+                    if (sortParam === 'asc') {
+                        return a.price - b.price;
+                    }
+
+                    if (sortParam === 'desc') {
+                        return b.price - a.price;
+                    }
+
+                    return 0;
+                })
                 .map((product) => (
                     <ProductItem product={product} key={product.id} />
                 ))}

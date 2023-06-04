@@ -1,5 +1,5 @@
 import Grid from '@mui/material/Grid';
-import { Alert } from '@mui/material';
+import { Alert, FormControl, InputLabel, Select } from '@mui/material';
 import Box from '@mui/material/Box';
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -8,6 +8,7 @@ import { ApiType } from '../types/api.ts';
 import { CategoryApi, Kind } from '../types/category.ts';
 import { Search } from './Inputs/Search.tsx';
 import ProductList from './Products/ProductList.tsx';
+import MenuItem from '@mui/material/MenuItem';
 
 async function getData<T>({ endpoint, signal }: ApiType): Promise<T[]> {
     const init: { signal?: AbortSignal } = {};
@@ -45,6 +46,7 @@ async function getProductsWithCategories(
 function HomePage() {
     const [products, setProducts] = useState<ProductWithCategories[]>([]);
     const [query, setQuery] = useState('');
+    const [sortParam, setSortParam] = useState<string>('');
 
     const location = useLocation();
     const [msg, setMsg] = useState<boolean | undefined>(
@@ -61,6 +63,10 @@ function HomePage() {
     }, []);
 
     // TODO: create loader
+
+    function handleSortPrice(e) {
+        setSortParam(e.target.value);
+    }
 
     return (
         <Box sx={{ my: '20px' }}>
@@ -83,8 +89,30 @@ function HomePage() {
                 <Grid item xs={12}>
                     <Search value={query} setQuery={setQuery} />
                 </Grid>
+                <Grid item xs={12}>
+                    <FormControl fullWidth sx={{ mb: 4 }}>
+                        <InputLabel id="priceSortingLabel">
+                            Sort by price
+                        </InputLabel>
+                        <Select
+                            labelId="priceSortingLabel"
+                            id="priceSorting"
+                            value={sortParam}
+                            label="Sort by price"
+                            onChange={handleSortPrice}
+                        >
+                            <MenuItem value={''}>---</MenuItem>
+                            <MenuItem value={'asc'}>Ascending</MenuItem>
+                            <MenuItem value={'desc'}>Descending</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Grid>
                 <Grid container spacing={2}>
-                    <ProductList products={products} query={query} />
+                    <ProductList
+                        products={products}
+                        query={query}
+                        sortParam={sortParam}
+                    />
                 </Grid>
             </Grid>
         </Box>
