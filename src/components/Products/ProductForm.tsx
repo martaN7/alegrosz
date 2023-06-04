@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid';
 import {
     Alert,
     FormControl,
@@ -14,21 +14,9 @@ import MenuItem from '@mui/material/MenuItem';
 import { useEffect, useState } from 'react';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { Product, ProductWithoutId } from '../../types/product.ts';
+import { Category, CategoryApi, Kind } from '../../types/category.ts';
 
 // [{id, name, subcategories: [{id, name}]}]
-
-interface Kind {
-    id: number;
-    name: string;
-}
-
-interface Category extends Kind {
-    subcategories: Array<Kind | undefined>;
-}
-
-interface CategoryApi extends Kind {
-    subcategories: number[];
-}
 
 async function getKind<T>(endpoint: string): Promise<T[]> {
     const response = await fetch(`/api/v1/${endpoint}`);
