@@ -53,7 +53,7 @@ function HomePage() {
     const [searchParams, setSearchParams] = useSearchParams();
 
     const [products, setProducts] = useState<ProductWithCategories[]>([]);
-    const [query, setQuery] = useState('');
+    const [query, setQuery] = useState<string>(searchParams.get('query') || '');
     const [sortParam, setSortParam] = useState<string>(
         searchParams.get('sortBy') || ''
     );
@@ -73,15 +73,17 @@ function HomePage() {
     }, []);
 
     useEffect(() => {
-        // TODO: create query params for search products
-        const queryParams: { sortBy?: string } = {};
+        const queryParams: { sortBy?: string; query?: string } = {};
 
         if (sortParam) {
             queryParams.sortBy = sortParam;
         }
+        if (query) {
+            queryParams.query = query;
+        }
 
         setSearchParams(queryParams);
-    }, [sortParam]);
+    }, [sortParam, query]);
 
     // TODO: create loader
 

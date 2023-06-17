@@ -3,7 +3,7 @@
     {
       "name": "Macbook Air",
       "description": "MacBook Air to lekki i wydajny laptop dla każdego, kto ceni sobie mobilność i wydajność. Wyposażony w ekran Retina, oferuje wyjątkowo jasny i ostry obraz. Dzięki wbudowanym głośnikom o wysokiej jakości, MacBook Air zapewnia doskonałe doświadczenie audio. Idealny dla profesjonalistów, którzy potrzebują niezawodnego narzędzia do pracy w dowolnym miejscu.",
-      "price": 315.30,
+      "price": 315.3,
       "image": "",
       "stockCount": 350,
       "barcode": "",
@@ -14,7 +14,7 @@
     {
       "name": "Macbook Air Plus",
       "description": "MacBook Air Plus to lekki i wydajny laptop, który dostarcza wydajność i jakość wykonania. Wyposażony w wyświetlacz Retina o niesamowitej rozdzielczości, MacBook Air Plus dostarcza obrazów o niesamowitej ostrości i głębi kolorów.",
-      "price": 295.00,
+      "price": 295,
       "image": "",
       "stockCount": 150,
       "barcode": "",
@@ -47,7 +47,7 @@
     {
       "name": "Macbook Pro Ultra",
       "description": "MacBook Pro Ultra to nadzwyczaj potężny laptop dla najbardziej wymagających profesjonalistów, zapewniający niezrównaną wydajność i doskonałą jakość wykonania. Idealny dla kreatywnych profesjonalistów poszukujących najwyższej jakości i niezawodności.",
-      "price": 550.00,
+      "price": 550,
       "image": "",
       "stockCount": 245,
       "barcode": "",
@@ -80,7 +80,7 @@
     {
       "name": "Macbook Pro Advanced",
       "description": "Macbook Pro Advanced to laptop dla profesjonalistów, oferujący zaawansowane funkcje, niezrównaną wydajność i doskonałą jakość wykonania. Jego innowacyjna klawiatura i rewolucyjny wyświetlacz Retina sprawiają, że praca na tym laptopie to czysta przyjemność.",
-      "price": 725.00,
+      "price": 725,
       "image": "",
       "stockCount": 255,
       "barcode": "",
