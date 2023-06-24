@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import { ProductWithCategories } from '../../types/product.ts';
+import { Link } from 'react-router-dom';
 
 type ProductItemProps = {
     product: ProductWithCategories;
@@ -38,7 +39,9 @@ function ProductItem({ product }: ProductItemProps) {
                     />
                 </CardContent>
                 <CardActions>
-                    <Button size="small">More info</Button>
+                    <Link to={`/products/${product.id}`}>
+                        <Button size="small">More info</Button>
+                    </Link>
                 </CardActions>
             </Card>
         </Grid>

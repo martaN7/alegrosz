@@ -3,6 +3,11 @@ import { Product } from '../../types/product.ts';
 import { useEffect, useState } from 'react';
 import { Loader } from '../Feedback/Loader.tsx';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import { Card, CardMedia, Paper } from '@mui/material';
+import { faker } from '@faker-js/faker';
 
 async function getProduct(
     endpoint: string,
@@ -55,12 +60,66 @@ function ProductDetails() {
     }
 
     return (
-        <div>
-            Product: {product.name}
-            <Button variant="contained" onClick={handleDelete}>
-                Delete
-            </Button>
-        </div>
+        <Box sx={{ my: '20px' }}>
+            <Grid container spacing={2}>
+                <Grid xs={12}>
+                    <Typography variant="h1" gutterBottom>
+                        {product.name}
+                    </Typography>
+                    <Typography variant="subtitle1" gutterBottom>
+                        {product.category}/{product.subcategory}
+                    </Typography>
+                    <Grid container spacing={2} xs={12}>
+                        <Grid item xs={6}>
+                            <Card sx={{ maxWidth: 645 }}>
+                                <CardMedia
+                                    sx={{ height: 440 }}
+                                    image={faker.image.urlLoremFlickr({
+                                        category: 'technics',
+                                    })}
+                                    title={product.name}
+                                />
+                            </Card>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Paper elevation={1} sx={{ p: '5px', mb: 4 }}>
+                                <Typography variant="body1">
+                                    {product.description}
+                                </Typography>
+                            </Paper>
+                            <Paper
+                                elevation={1}
+                                sx={{
+                                    p: '5px',
+                                    display: 'flex',
+                                    gap: 2,
+                                    mb: 2,
+                                }}
+                            >
+                                <Typography variant="h4">
+                                    price: ${product.price}
+                                </Typography>
+                                <Button variant="contained">Buy now</Button>
+                            </Paper>
+                            <Paper sx={{ display: 'flex', gap: 2, p: 1 }}>
+                                <Button
+                                    variant="contained"
+                                    onClick={handleDelete}
+                                >
+                                    Edit
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    onClick={handleDelete}
+                                >
+                                    Delete
+                                </Button>
+                            </Paper>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Box>
     );
 }
 

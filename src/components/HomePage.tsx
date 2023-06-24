@@ -10,22 +10,11 @@ import Box from '@mui/material/Box';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Product, ProductWithCategories } from '../types/product.ts';
-import { ApiType } from '../types/api.ts';
 import { CategoryApi, Kind } from '../types/category.ts';
 import { Search } from './Inputs/Search.tsx';
 import ProductList from './Products/ProductList.tsx';
 import MenuItem from '@mui/material/MenuItem';
-
-async function getData<T>({ endpoint, signal }: ApiType): Promise<T[]> {
-    const init: { signal?: AbortSignal } = {};
-
-    if (signal !== undefined) {
-        init.signal = signal;
-    }
-
-    const response = await fetch(`/api/v1/${endpoint}`, init);
-    return response.json();
-}
+import { getData } from '../api/api.ts';
 
 async function getProductsWithCategories(
     signal: AbortSignal
